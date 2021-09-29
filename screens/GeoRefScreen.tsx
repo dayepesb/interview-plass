@@ -8,24 +8,26 @@ import useDarkTheme from '../hooks/useDarkTheme';
 import { Button } from 'react-native-elements';
 import Colors from '../res/colors';
 import { connect } from 'react-redux';
-import { addUser } from '../redux/actions';
+import { geoRefUser } from '../redux/actions';
 import { USER_SCREEN_NAME } from '../constants/Routes';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-const ModalScreen = (props) => {
+const GeoRefScreen = (props) => {
+
+  const route = useRoute();
+
+  const { id } = route.params;
 
   const {
-    addUser,
+    geoRefUser,
   } = props;
 
   const navigation = useNavigation();
 
   const isDarkMode = useDarkTheme();
 
-  const [name, setName] = useState();
-  const [lastName, setLastName] = useState();
-  const [address, setAddess] = useState();
-  const [city, setCity] = useState();
+  const [latitud, setLatitud] = useState();
+  const [longitud, setLongitud] = useState();
 
   const styles = StyleSheet.create({
     container: {
@@ -72,73 +74,47 @@ const ModalScreen = (props) => {
   });
 
   const handleAddUser = () => {
-    console.log('add user');
+    console.log('geo user');
     const dataUser = {
-      nombre: name, apellido: lastName, direccion: address, ciudad: city
+      id, latitud, longitud
     };
-    addUser(dataUser);
+    geoRefUser(dataUser);
     navigation.navigate('Root');
   }
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.input_container}>
-        <Text style={styles.text}>{'Name'}</Text>
+        <Text style={styles.text}>{'Latitude'}</Text>
         <TextInputLogo
           logoName="user"
           autoCapitalize="words"
           returnKeyType="done"
           autoCorrect={false}
           autoCompleteType="name"
-          placeholder="Juan"
-          value={name}
-          onChangeText={setName}
+          placeholder="0.0000000"
+          value={latitud}
+          onChangeText={setLatitud}
         />
       </View>
       <View style={styles.input_container}>
-        <Text style={styles.text}>{'Lasdt Name'}</Text>
+        <Text style={styles.text}>{'Longitude'}</Text>
         <TextInputLogo
           logoName="user"
           autoCapitalize="words"
           returnKeyType="done"
           autoCorrect={false}
           autoCompleteType="name"
-          placeholder="Rodriguez"
-          value={lastName}
-          onChangeText={setLastName}
-        />
-      </View>
-      <View style={styles.input_container}>
-        <Text style={styles.text}>{'Adrress'}</Text>
-        <TextInputLogo
-          logoName="exclamation"
-          autoCapitalize="words"
-          returnKeyType="done"
-          autoCorrect={false}
-          autoCompleteType="address"
-          placeholder="Cll 91 # 90 - 63"
-          value={address}
-          onChangeText={setAddess}
-        />
-      </View>
-      <View style={styles.input_container}>
-        <Text style={styles.text}>{'City'}</Text>
-        <TextInputLogo
-          logoName="exclamation"
-          autoCapitalize="words"
-          returnKeyType="done"
-          autoCorrect={false}
-          autoCompleteType="city"
-          placeholder="Bogota D.C"
-          value={city}
-          onChangeText={setCity}
+          placeholder="0.0000000"
+          value={longitud}
+          onChangeText={setLongitud}
         />
       </View>
       <Button
         titleStyle={{
           color: Colors.BLUE.secondary
         }}
-        title={'Add User'}
+        title={'Geo Ref User'}
         onPress={handleAddUser}
         type="clear"
       />
@@ -147,7 +123,7 @@ const ModalScreen = (props) => {
 }
 
 const mapDispatchToProps = {
-  addUser,
+  geoRefUser,
 };
 
-export default connect(null, mapDispatchToProps)(ModalScreen);
+export default connect(null, mapDispatchToProps)(GeoRefScreen);
